@@ -1,0 +1,113 @@
+module app-vip-deployment {
+
+  namespace "http://example.com/app-vip-deployment";
+  prefix app-vip-deployment;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  container action {
+    tailf:action double {
+      tailf:actionpoint app-vip-deployment-action;
+      input {
+        leaf number {
+          type uint8;
+        }
+      }
+      output {
+        leaf result {
+          type uint16;
+        }
+      }
+    }
+  }
+
+  // top level API
+  list app-vip-deployment {
+    description "Automated F5 VIP deployment workflow";
+    unique "dns_name";
+
+    key name;
+    leaf name {
+      tailf:info "Unique name for this service";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+
+    leaf dns_name {
+      tailf:info "DNS name which will be load balanced";
+      type string;
+    }
+
+
+    uses ncs:service-data;
+    ncs:servicepoint app-vip-deployment-servicepoint;
+
+    list gtm {
+          ordered-by user;
+
+          key device;
+          leaf device {
+            type leafref {
+              path "/ncs:devices/ncs:device/ncs:name";
+            }
+          }
+    }
+
+
+
+    list ltm {
+          ordered-by user;
+
+          key device;
+          leaf device {
+            type leafref {
+              path "/ncs:devices/ncs:device/ncs:name";
+            }
+          }
+
+          leaf vip_address {
+            type inet:ipv4-address;
+          }
+
+          leaf vip_port {
+            type inet:port-number;
+          }
+
+          list nodes {
+
+            key name;
+            leaf name {
+              type string;
+            }
+            leaf address {
+              type inet:ipv4-address;
+            }
+            leaf port {
+              type inet:port-number;
+            }
+
+          }
+
+
+    }
+
+
+  }
+}
