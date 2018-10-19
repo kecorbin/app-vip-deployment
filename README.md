@@ -1,3 +1,44 @@
+# app-vip-deployment
+
+
+# Sample Usage
+
+```
+app-vip-deployment TEST_APP1
+ dns_name myapp.acme.com
+
+ gtm gtm0
+
+ gtm gtm1
+ 
+ ltm ltm0
+  vip_address 1.1.1.1
+  vip_port    443
+  nodes app1_node1
+   address 11.11.11.1
+   port    443
+  !
+  nodes app1_node2
+   address 11.11.11.2
+   port    443
+  !
+ !
+ ltm ltm1
+  vip_address 2.2.2.2
+  vip_port    443
+  nodes app1_node1
+   address 22.22.22.1
+   port    443
+  !
+  nodes app1_node2
+   address 22.22.22.2
+   port    443
+  !
+
+```
+
+# Credits
+
 This is a generated Python package, made by:
 
   ncs-make-package --service-skeleton python-and-template \
