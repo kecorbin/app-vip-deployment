@@ -1,0 +1,2 @@
+service name,ltm_device,vip_ip,vip_port,node_name,node_ip,node_port,dns_server,gtm1,gtm2
+testvip_utca01,real,1.1.1.1,443,vip1-node1,70.1.1.1,80,testvip_utca01.acme.com,gtm0,gtm1
