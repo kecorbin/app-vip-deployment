@@ -1,0 +1,29 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{./device}</name>
+        <config>
+
+          <ltm xmlns="http://tail-f.com/ned/f5-bigip">
+
+
+            <virtual>
+              <name>{$VIP_NAME}</name>
+              <destination>{$VIP_DESTINATION}</destination>
+              <ip-protocol>{$PROTOCOL}</ip-protocol>
+              <mask>{$VIP_MASK}</mask>
+              <pool>{$POOL_NAME}</pool>
+              <profiles>
+                <profile>
+                  <name>{$PROFILE}</name>
+                </profile>
+              </profiles>
+              <source>{$SOURCE}</source>
+              <translate-address>enabled</translate-address>
+              <translate-port>enabled</translate-port>
+            </virtual>
+          </ltm>
+      </config>
+    </device>
+  </devices>
+</config-template>

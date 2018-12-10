@@ -29,21 +29,7 @@
               <!-- <monitor>monitor_tcp_8143_20i_101t</monitor> -->
             </pool>
 
-            <virtual>
-              <name>VIP_NAME</name>
-              <destination>1.1.1.1:http</destination>
-              <ip-protocol>{$PROTOCOL}</ip-protocol>
-              <mask>{$VIP_MASK}</mask>
-              <pool>{$POOL_NAME}</pool>
-              <profiles>
-                <profile>
-                  <name>{$PROFILE}</name>
-                </profile>
-              </profiles>
-              <source>{$SOURCE}</source>
-              <translate-address>enabled</translate-address>
-              <translate-port>enabled</translate-port>
-            </virtual>
+
 
 
 

@@ -1,4 +1,4 @@
-# -*- mode: python; python-indent: 4 -*-
+    # -*- mode: python; python-indent: 4 -*-
 import ncs
 from ncs.application import Service
 from ncs.dp import Action
@@ -28,6 +28,18 @@ class ServiceCallbacks(Service):
     @Service.create
     def cb_create(self, tctx, root, service, proplist):
         self.log.info('Service create(service=', service._path, ')')
+        self.log.info(dir(service))
+        for ltm in service.ltm:
+            vip_vars = ncs.template.Variables()
+            vip_vars.add('VIP_NAME', service.name)
+            vip_vars.add('POOL_NAME', service.name + '_pool')
+            vip_vars.add('VIP_DESTINATION', ltm.vip_ip + ':http')
+            vip_vars.add('PROTOCOL', 'tcp')
+            vip_vars.add('SOURCE', '0.0.0.0/0')
+            vip_vars.add('PROFILE', 'tcp')
+            vip_vars.add('VIP_MASK', '255.255.255.255')
+            template = ncs.template.Template(service)
+            template.apply('vip-template', vip_vars)
 
         vars = ncs.template.Variables()
 
