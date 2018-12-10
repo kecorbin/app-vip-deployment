@@ -38,6 +38,8 @@ class ServiceCallbacks(Service):
             vip_vars.add('SOURCE', '0.0.0.0/0')
             vip_vars.add('PROFILE', 'tcp')
             vip_vars.add('VIP_MASK', '255.255.255.255')
+            self.log.info("Rendering VIP Template with vars")
+            self.log.info(vip_vars)
             template = ncs.template.Template(service)
             template.apply('vip-template', vip_vars)
 
