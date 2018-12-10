@@ -33,7 +33,7 @@ class ServiceCallbacks(Service):
             vip_vars = ncs.template.Variables()
             vip_vars.add('VIP_NAME', service.name)
             vip_vars.add('POOL_NAME', service.name + '_pool')
-            vip_vars.add('VIP_DESTINATION', ltm.vip_ip + ':http')
+            vip_vars.add('VIP_DESTINATION', ltm.vip_address + ':http')
             vip_vars.add('PROTOCOL', 'tcp')
             vip_vars.add('SOURCE', '0.0.0.0/0')
             vip_vars.add('PROFILE', 'tcp')
