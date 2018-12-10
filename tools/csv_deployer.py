@@ -75,4 +75,4 @@ if __name__ == "__main__":
         # This skips the first row of the CSV file (header)
         next(vips)
         for v in vips:
-            print(deploy_app(*v).text)
+            print(deploy_app(*v))
