@@ -31,6 +31,7 @@ class ServiceCallbacks(Service):
         self.log.info(dir(service))
         for ltm in service.ltm:
             vip_vars = ncs.template.Variables()
+            vip_vars.add('DEVICE', ltm.device)
             vip_vars.add('VIP_NAME', service.name)
             vip_vars.add('POOL_NAME', service.name + '_pool')
             vip_vars.add('VIP_DESTINATION', ltm.vip_address + ':http')
