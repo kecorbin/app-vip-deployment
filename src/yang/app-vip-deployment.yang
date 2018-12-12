@@ -49,6 +49,11 @@ module app-vip-deployment {
       type string;
     }
 
+    leaf change_request {
+      tailf:info "Change request number";
+      type string;
+    }
+
 
     leaf dns_name {
       tailf:info "DNS name which will be load balanced";
