@@ -3,10 +3,8 @@
     <device>
       <name>{$DEVICE}</name>
         <config>
-
+          <!-- create VIP on LTM -->
           <ltm xmlns="http://tail-f.com/ned/f5-bigip">
-
-
             <virtual>
               <name>{$VIP_NAME}</name>
               <destination>{$VIP_DESTINATION}</destination>
@@ -23,6 +21,7 @@
               <translate-port>enabled</translate-port>
             </virtual>
           </ltm>
+
       </config>
     </device>
   </devices>

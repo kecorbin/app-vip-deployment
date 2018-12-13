@@ -1,4 +1,4 @@
-    # -*- mode: python; python-indent: 4 -*-
+# -*- mode: python; python-indent: 4 -*-
 import ncs
 from ncs.application import Service
 from ncs.dp import Action
@@ -8,6 +8,7 @@ def verify_cr_approval(cr_number):
     # this is where we can validate that a CR for this VIP]
     # deployment is approved.
     return True
+
 
 # ---------------
 # ACTIONS EXAMPLE
@@ -46,41 +47,29 @@ class ServiceCallbacks(Service):
                 vip_vars.add('PROFILE', 'tcp')
                 vip_vars.add('VIP_MASK', '255.255.255.255')
                 vip_vars.add('DATACENTER', 'UTC-A')
-                self.log.info("Rendering VIP Template with vars")
-                self.log.info(vip_vars)
-                template = ncs.template.Template(service)
-                template.apply('vip-template', vip_vars)
+
+                self.log.info("Rendering Node/Pool Template")
+                self.log.info("avail vars in rendering: {}".format(vip_vars))
                 pool_template = ncs.template.Template(service)
                 pool_template.apply('ltm-node-pool-template', vip_vars)
 
+                self.log.info("Rendering VIP Template ")
+                self.log.info("avail vars in rendering: {}".format(vip_vars))
+                template = ncs.template.Template(service)
+                template.apply('ltm-vip-template', vip_vars)
 
+                # each LTM VIP needs to be configured on each GTM
                 for gtm in service.gtm:
                     vip_vars.add('GTM_DEVICE', gtm.device)
                     # TODO need to expose somehow
                     vip_vars.add('MONITOR_NAME', 'monitor_tcp_80_30i_120t')
-                    vip_vars.add('MEMBER_NAME', service.name + ':' + service.name)
+                    member_name = service.name + ":" + service.name
+                    vip_vars.add('MEMBER_NAME', member_name)
                     vip_vars.add('GTM_SERVER_ADDRESS', ltm.vip_address)
 
                     self.log.info("Rendering GTM Template with vars")
                     self.log.info(vip_vars)
                     template.apply('gtm-template', vip_vars)
-
-
-            # vars = ncs.template.Variables()
-
-        # TODO: cleanup
-        # Fixup some F5 specific fields
-        # generate some additional/default values
-        # based on service data.  Any additional
-        # logic is easily added later
-        # vars.add('POOL_NAME', service.name + '_pool')
-        # # vars.add('VIP_DESTINATION', vip_dest)
-        # vars.add('PROTOCOL', 'tcp')
-        # vars.add('SOURCE', '0.0.0.0/0')
-        # vars.add('PROFILE', 'tcp')
-        # vars.add('VIP_MASK', '255.255.255.255')
-        # self.log.info("Rendering Template with VARS")
-        # self.log.info(vars)
 
     # The pre_modification() and post_modification() callbacks are optional,
     # and are invoked outside FASTMAP. pre_modification() is invoked before
@@ -116,7 +105,8 @@ class Main(ncs.application.Application):
         # Service callbacks require a registration for a 'service point',
         # as specified in the corresponding data model.
         #
-        self.register_service('app-vip-deployment-servicepoint', ServiceCallbacks)
+        self.register_service('app-vip-deployment-servicepoint',
+                              ServiceCallbacks)
 
         # When using actions, this is how we register them:
         #

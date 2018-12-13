@@ -4,6 +4,8 @@
       <name>{$GTM_DEVICE}</name>
       <config>
         <gtm xmlns="http://tail-f.com/ned/f5-bigip">
+          <!-- create pool + members -->
+
           <pool>
             <name>{$POOL_NAME}</name>
             <monitor>{$MONITOR_NAME}</monitor>
@@ -14,6 +16,7 @@
               </member>
             </members>
           </pool>
+          <!-- in this context a server is really a VIP on an LTM -->
           <server>
             <name>{$VIP_NAME}</name>
             <addresses>

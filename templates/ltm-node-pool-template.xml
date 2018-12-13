@@ -28,11 +28,6 @@
               <!-- TODO: how do we handle monitors -->
               <!-- <monitor>monitor_tcp_8143_20i_101t</monitor> -->
             </pool>
-
-
-
-
-
           </ltm>
           </config>
       </device>
