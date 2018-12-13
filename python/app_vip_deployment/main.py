@@ -50,6 +50,9 @@ class ServiceCallbacks(Service):
                 self.log.info(vip_vars)
                 template = ncs.template.Template(service)
                 template.apply('vip-template', vip_vars)
+                pool_template = ncs.template.Template(service)
+                pool_template.apply('ltm-node-pool-template', vip_vars)
+
 
                 for gtm in service.gtm:
                     vip_vars.add('GTM_DEVICE', gtm.device)
@@ -78,8 +81,6 @@ class ServiceCallbacks(Service):
         # vars.add('VIP_MASK', '255.255.255.255')
         # self.log.info("Rendering Template with VARS")
         # self.log.info(vars)
-        # template = ncs.template.Template(service)
-        # template.apply('app-vip-deployment-template', vars)
 
     # The pre_modification() and post_modification() callbacks are optional,
     # and are invoked outside FASTMAP. pre_modification() is invoked before
