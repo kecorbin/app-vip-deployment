@@ -63,7 +63,7 @@ class ServiceCallbacks(Service):
                     template.apply('gtm-template', vip_vars)
 
 
-            vars = ncs.template.Variables()
+            # vars = ncs.template.Variables()
 
         # TODO: cleanup
         # Fixup some F5 specific fields
