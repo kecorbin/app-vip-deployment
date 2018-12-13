@@ -1,0 +1,38 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{$GTM_DEVICE}</name>
+      <config>
+        <gtm xmlns="http://tail-f.com/ned/f5-bigip">
+          <pool>
+            <name>{$POOL_NAME}</name>
+            <monitor>{$MONITOR_NAME}</monitor>
+            <members>
+              <member>
+                <name>{$MEMBER_NAME}</name>
+                <order>0</order>
+              </member>
+            </members>
+          </pool>
+          <server>
+            <name>{$VIP_NAME}</name>
+            <addresses>
+              <address>
+                <name>{$GTM_SERVER_ADDRESS}</name>
+                <device-name>{$VIP_NAME}</device-name>
+              </address>
+            </addresses>
+            <datacenter>{$DATACENTER}</datacenter>
+            <product>generic-host</product>
+            <virtual-servers>
+              <virtual-server>
+                <name>{$VIP_NAME}</name>
+                <destination>{$VIP_DESTINATION}</destination>
+              </virtual-server>
+            </virtual-servers>
+          </server>
+        </gtm>
+      </config>
+    </device>
+  </devices>
+</config-template>

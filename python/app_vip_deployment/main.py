@@ -39,35 +39,47 @@ class ServiceCallbacks(Service):
                 vip_vars = ncs.template.Variables()
                 vip_vars.add('DEVICE', ltm.device)
                 vip_vars.add('VIP_NAME', service.name)
-                vip_vars.add('POOL_NAME', service.name + '_pool')
+                vip_vars.add('POOL_NAME', 'pool_' + service.name)
                 vip_vars.add('VIP_DESTINATION', ltm.vip_address + ':http')
                 vip_vars.add('PROTOCOL', 'tcp')
                 vip_vars.add('SOURCE', '0.0.0.0/0')
                 vip_vars.add('PROFILE', 'tcp')
                 vip_vars.add('VIP_MASK', '255.255.255.255')
+                vip_vars.add('DATACENTER', 'UTC-A')
                 self.log.info("Rendering VIP Template with vars")
                 self.log.info(vip_vars)
                 template = ncs.template.Template(service)
                 template.apply('vip-template', vip_vars)
 
+                for gtm in service.gtm:
+                    vip_vars.add('GTM_DEVICE', gtm.device)
+                    # TODO need to expose somehow
+                    vip_vars.add('MONITOR_NAME', 'monitor_tcp_80_30i_120t')
+                    vip_vars.add('MEMBER_NAME', service.name + ':' + service.name)
+                    vip_vars.add('GTM_SERVER_ADDRESS', ltm.vip_address)
+
+                    self.log.info("Rendering GTM Template with vars")
+                    self.log.info(vip_vars)
+                    template.apply('gtm-template', vip_vars)
+
+
             vars = ncs.template.Variables()
 
+        # TODO: cleanup
         # Fixup some F5 specific fields
-
-
         # generate some additional/default values
         # based on service data.  Any additional
         # logic is easily added later
-        vars.add('POOL_NAME', service.name + '_pool')
-        # vars.add('VIP_DESTINATION', vip_dest)
-        vars.add('PROTOCOL', 'tcp')
-        vars.add('SOURCE', '0.0.0.0/0')
-        vars.add('PROFILE', 'tcp')
-        vars.add('VIP_MASK', '255.255.255.255')
-        self.log.info("Rendering Template with VARS")
-        self.log.info(vars)
-        template = ncs.template.Template(service)
-        template.apply('app-vip-deployment-template', vars)
+        # vars.add('POOL_NAME', service.name + '_pool')
+        # # vars.add('VIP_DESTINATION', vip_dest)
+        # vars.add('PROTOCOL', 'tcp')
+        # vars.add('SOURCE', '0.0.0.0/0')
+        # vars.add('PROFILE', 'tcp')
+        # vars.add('VIP_MASK', '255.255.255.255')
+        # self.log.info("Rendering Template with VARS")
+        # self.log.info(vars)
+        # template = ncs.template.Template(service)
+        # template.apply('app-vip-deployment-template', vars)
 
     # The pre_modification() and post_modification() callbacks are optional,
     # and are invoked outside FASTMAP. pre_modification() is invoked before
